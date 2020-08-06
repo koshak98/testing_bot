@@ -2,7 +2,6 @@
 import requests
 import json
 import telebot
-import bs4
 from bot.src.Task import Task
 import bot.src.parser as parser
 import bot.src.markups as markups

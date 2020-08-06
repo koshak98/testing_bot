@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import telebot
-import bot
 import Task
 
 
@@ -58,9 +57,47 @@ def web_hook():
     print("now webhook's url is: {}\n".format(bot.get_webhook_info().url))
     return "webhook was changed", 200
 
+@bot.message_handler(commands=['start', 'go'])
+def start_handler(message):
+    if not task.isRunning:
+        chat_id = message.chat.id
+        print(message.chat.id)
+        msg = bot.send_message(
+            chat_id, 'Привет)\nСколько видео по теме ты хочешь искать?', reply_markup=markups.maxres_markup)
+        bot.register_next_step_handler(msg.wait(), askMaxResults)
+
+def askMaxResults(message):
+    chat_id = message.chat.id
+    text = message.text
+    if text.isdigit():
+        task.maxResult = int(text)
+        msg = bot.send_message(
+            chat_id, f'Отлично. Будем искать {task.maxResult} лучших видео по теме:')
+        bot.register_next_step_handler(msg.wait(), askSource)
+    else:
+        msg = bot.send_message(
+            chat_id, 'Введите, пожалуйста, натуральное число')
+        bot.register_next_step_handler(msg.wait(), askMaxResults)
+        return
+
+
+def askSource(message):
+    chat_id = message.chat.id
+    text = message.text.lower()
+    response = requests.get("http://web:8000/youtube/video/urlsbyprompt",
+                            params={"prompt": text, "maxResult": task.maxResult})
+    video_urls = json.loads(response.text)
+
+    for url in video_urls:
+        bot.send_message(chat_id, url)
+
+
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=80)
     
+
 
 
 
