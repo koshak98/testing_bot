@@ -1,10 +1,5 @@
 # imports
-import requests
-import json
-import telebot
-from bot.src.Task import Task
-import bot.src.parser as parser
-import bot.src.markups as markups
+
 
 
 # token = '1363386793:AAEq5fcDZEQm0YIV-5Wrl4ku8yU_B_8EABM'  # @pixelray_bot
