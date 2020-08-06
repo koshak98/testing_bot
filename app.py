@@ -36,13 +36,13 @@ def webhookvideo():
 
 
 # For Bot 
-@server.route("/" + TOKEN, methods=["POST"])
+@app.route("/" + TOKEN, methods=["POST"])
 def get_message():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "bot got new update", 200
 
 
-@server.route("/")
+@app.route("/")
 def webhook():
     print("webhook's url was: {}\n".format(bot.get_webhook_info().url))
     bot.remove_webhook()
