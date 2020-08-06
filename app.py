@@ -43,7 +43,7 @@ def get_message():
 
 
 @app.route("/")
-def webhook():
+def web_hook():
     print("webhook's url was: {}\n".format(bot.get_webhook_info().url))
     bot.remove_webhook()
     bot.set_webhook(url=webhook_url)
