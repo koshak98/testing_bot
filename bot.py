@@ -10,9 +10,6 @@ import bot.src.markups as markups
 
 # token = '1363386793:AAEq5fcDZEQm0YIV-5Wrl4ku8yU_B_8EABM'  # @pixelray_bot
 
-task = Task()
-bot = telebot.AsyncTeleBot(task.TOKEN, parse_mode=None)
-
 # handlers
 @bot.message_handler(commands=['start', 'go'])
 def start_handler(message):
@@ -102,10 +99,3 @@ def askAmount(message):
 
 if __name__ == "__main__":
     main()
-
-
-
-@server.route("/" + TOKEN, methods=["POST"])
-def get_message():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "bot got new update", 200

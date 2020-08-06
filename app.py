@@ -1,5 +1,8 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+import telebot
+import bot
+import Task
 
 
 TOKEN = '1395616602:AAEitL36CEX_epUhcJeBFhqE_oc8ZU2NAek'
@@ -9,7 +12,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ynrrjmbbwpkdse:eb7f211b285eb
 
 db = SQLAlchemy(app)
 
+task = Task()
+bot = telebot.AsyncTeleBot(task.TOKEN, parse_mode=None)
+
 from db_data import User, Video
+
 
 @app.route('/adduser')
 def webhook():
