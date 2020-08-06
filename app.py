@@ -97,14 +97,12 @@ def askMaxResults(message):
 def askSource(message):
     chat_id = message.chat.id
     text = message.text.lower()
-    response = requests.get("http://web:8000/youtube/video/urlsbyprompt",
+    response = requests.get("{}/youtube/video/urlsbyprompt".format(webhook_url),
                             params={"prompt": text, "maxResult": task.maxResult})
     video_urls = json.loads(response.text)
 
     for url in video_urls:
         bot.send_message(chat_id, url)
-
-
 
 
 if __name__ == '__main__':
