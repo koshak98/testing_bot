@@ -1,4 +1,4 @@
-from manage import db, app
+from manage import db, server
 
 class User(db.Model):
     __tablename__ = 'users'

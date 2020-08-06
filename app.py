@@ -10,18 +10,20 @@ import markups
 TOKEN = '1395616602:AAEitL36CEX_epUhcJeBFhqE_oc8ZU2NAek'
 # webhook_url = 'https://maximtestheroku-29.herokuapp.com/' + TOKEN
 webhook_url = 'https://d014fd4d3690.ngrok.io' + TOKEN
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ynrrjmbbwpkdse:eb7f211b285eb95d562cacaf3f885ec31edbc6ae43e3b42ddc8764e5234714bb@ec2-34-238-26-109.compute-1.amazonaws.com:5432/dbsd0628b94q4s'
+server = Flask(__name__)
+server.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ynrrjmbbwpkdse:eb7f211b285eb95d562cacaf3f885ec31edbc6ae43e3b42ddc8764e5234714bb@ec2-34-238-26-109.compute-1.amazonaws.com:5432/dbsd0628b94q4s'
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(server)
 
 task = t.Task()
-bot = telebot.AsyncTeleBot(task.TOKEN, parse_mode=None)
-
-from db_data import User, Video
+bot = telebot.AsyncTeleBot(task.TOKEN)
 
 
-@app.route('/adduser')
+from db_data import Video
+from db_data import User
+
+
+@server.route('/adduser')
 def webhook():
     user_id, name, email = request.args['id'], request.args['name'], request.args['email']
     u = User(id=user_id, nickname=name, email=email)
@@ -30,14 +32,14 @@ def webhook():
     db.session.commit()
     return "user created"
 
-@app.route('/deleteuser')
+@server.route('/deleteuser')
 def delete():
     u = User.query.get(request.args['id'])
     db.session.delete(u)
     db.session.commit()
     return "user deleted"
 
-@app.route('/addvideo')
+@server.route('/addvideo')
 def webhookvideo():
     video_id, video_url = request.args['id'], request.args['video_url']
     v = Video(id=video_id, video_url=video_url)
@@ -47,13 +49,13 @@ def webhookvideo():
 
 
 # For Bot 
-@app.route("/" + TOKEN, methods=["POST"])
+@server.route("/" + TOKEN, methods=["POST"])
 def get_message():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "bot got new update", 200
 
 
-@app.route("/")
+@server.route("/")
 def web_hook():
     print("webhook's url was: {}\n".format(bot.get_webhook_info().url))
     bot.remove_webhook()
@@ -96,10 +98,8 @@ def askSource(message):
         bot.send_message(chat_id, url)
 
 
-
-
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=80)
+    server.run(host='127.0.0.1', port=80)
     
 
 
