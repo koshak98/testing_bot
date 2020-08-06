@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 TOKEN = '1395616602:AAEitL36CEX_epUhcJeBFhqE_oc8ZU2NAek'
+webhook_url = 'https://maximtestheroku-29.herokuapp.com/' + TOKEN
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ynrrjmbbwpkdse:eb7f211b285eb95d562cacaf3f885ec31edbc6ae43e3b42ddc8764e5234714bb@ec2-34-238-26-109.compute-1.amazonaws.com:5432/dbsd0628b94q4s'
 
