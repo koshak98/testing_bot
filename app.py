@@ -47,6 +47,13 @@ def webhookvideo():
     db.session.add(v)
     db.session.commit()
 
+@server.route("/youtube/video/urlsbyprompt")
+def getVideoUrlsByPrompt(prompt: str, maxResult: int):
+    videosInfo = getVideoInfoByPrompt(prompt, maxResult)
+    logging.info(f"videosInfo={str(videosInfo)}")
+    result = map(lambda video: getUrlByVideoId(video.Id), videosInfo)
+    return JSONResponse(list(result))
+
 
 # For Bot 
 @server.route("/" + TOKEN, methods=["POST"])
@@ -96,6 +103,8 @@ def askSource(message):
 
     for url in video_urls:
         bot.send_message(chat_id, url)
+
+
 
 
 if __name__ == '__main__':
