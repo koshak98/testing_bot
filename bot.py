@@ -98,11 +98,14 @@ def askAmount(message):
     else:
         output = parser.getTitlesFromAll(int(text), task.myFilter)
     msg = bot.send_message(chat_id, output)
-
-
-def main():
-    bot.polling(none_stop=True)
-
+  
 
 if __name__ == "__main__":
     main()
+
+
+
+@server.route("/" + TOKEN, methods=["POST"])
+def get_message():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "bot got new update", 200
